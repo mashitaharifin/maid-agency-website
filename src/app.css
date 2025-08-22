@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+
+::selection {
+  background-color: #f8adcc; /* pink */
+  color: #ffffff; /* text color while highlighted */
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track (background) */
+::-webkit-scrollbar-track {
+  background: #dad8d3; /* gold */
+}
+
+/* Thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background: #f9a8d4; /* Tailwind pink-300 */
+  border-radius: 9999px;
+}
+
+/* Hover effect */
+::-webkit-scrollbar-thumb:hover {
+  background: #f472b6; /* Tailwind pink-400 for hover */
+}
+
+
+
