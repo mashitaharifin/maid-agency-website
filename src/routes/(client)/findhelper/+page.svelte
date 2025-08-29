@@ -1,19 +1,24 @@
+<script>
+    let { data } = $props();
+    const steps = data.helperSteps;
+</script>
+
 <svelte:head>
   <title>Find Your Helper</title>
   <meta name="description" content="Join a trusted maid agency in Singapore. Learn why working in Singapore is rewarding, our support for helpers, and opportunities for Myanmarese and Indonesian maids." />
 </svelte:head>
 
 <!-- Find Your Helper Header -->
-<section class="relative bg-[url('/images/header6.jpg')] bg-cover bg-center bg-no-repeat py-32">
+<section class="relative bg-cover bg-center bg-no-repeat py-32"
+  style="background-image: url({data.hero.bgImage});">
   <div class="absolute inset-0 bg-black/50"></div> <!-- overlay -->
 
   <div class="relative max-w-4xl mx-auto text-center px-6">
     <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 animate-fadeIn">
-      Find Your Helper
+      {data.hero.mainHeading}
     </h1>
     <p class="max-w-2xl mx-auto text-gray-100 animate-fadeIn delay-100">
-      A smooth, guided process to match your family with a caring, well-trained domestic helper—
-      handled with professionalism and heart.
+      {data.hero.subheading}
     </p>   
   </div>
 </section>
@@ -21,18 +26,18 @@
 <section class="bg-white py-16 px-6">
   <!-- Steps -->
   <div class="max-w-7xl mx-auto mt-16">
-    <h2 class="text-3xl md:text-4xl font-bold text-pink-500 text-center mb-10 animate-fadeIn">How It Works</h2>
+    <h2 class="text-3xl md:text-4xl font-bold text-pink-500 text-center mb-10 animate-fadeIn">{data.steps[0]?.sectionTitle}</h2>
     <div class="grid md:grid-cols-5 gap-6">
   <!-- Step 1 -->
   <div class="bg-pink-50 border-t-4 border-pink-500 rounded-2xl shadow-lg p-6 
               hover:shadow-2xl hover:scale-105 transform transition duration-300 ease-in-out animate-slideUp">
     <div class="flex items-center justify-center w-16 h-16 bg-pink-300 rounded-full mx-auto mb-4 
                 hover:rotate-12 transition duration-300">
-      <span class="text-white text-2xl">📝</span>
+      <span class="text-white text-2xl">{data.steps[0].icon}</span>
     </div>
-    <p class="text-xs font-semibold text-pink-600 mb-1 text-center">STEP 1</p>
-    <h3 class="text-lg font-semibold text-pink-600 text-center mb-2">Tell Us Your Needs</h3>
-    <p class="text-gray-700 text-sm text-center">Share your household requirements, preferences, and schedule.</p>
+    <p class="text-xs font-semibold text-pink-600 mb-1 text-center">{data.steps[0].stepNo}</p>
+    <h3 class="text-lg font-semibold text-pink-600 text-center mb-2">{data.steps[0].title}</h3>
+    <p class="text-gray-700 text-sm text-center">{data.steps[0].description}</p>
   </div>
 
   <!-- Step 2 -->
@@ -40,11 +45,11 @@
               hover:shadow-2xl hover:scale-105 transform transition duration-300 ease-in-out animate-slideUp delay-100">
     <div class="flex items-center justify-center w-16 h-16 bg-yellow-500 rounded-full mx-auto mb-4 
                 hover:rotate-12 transition duration-300">
-      <span class="text-white text-2xl">🧾</span>
+      <span class="text-white text-2xl">{data.steps[1].icon}</span>
     </div>
-    <p class="text-xs font-semibold text-yellow-600 mb-1 text-center">STEP 2</p>
-    <h3 class="text-lg font-semibold text-yellow-600 text-center mb-2">Shortlisted Profiles</h3>
-    <p class="text-gray-700 text-sm text-center">We curate suitable candidates aligned to your requirements.</p>
+    <p class="text-xs font-semibold text-yellow-600 mb-1 text-center">{data.steps[1].stepNo}</p>
+    <h3 class="text-lg font-semibold text-yellow-600 text-center mb-2">{data.steps[1].title}</h3>
+    <p class="text-gray-700 text-sm text-center">{data.steps[1].description}</p>
   </div>
 
   <!-- Step 3 -->
@@ -52,11 +57,11 @@
               hover:shadow-2xl hover:scale-105 transform transition duration-300 ease-in-out animate-slideUp delay-200">
     <div class="flex items-center justify-center w-16 h-16 bg-pink-300 rounded-full mx-auto mb-4 
                 hover:rotate-12 transition duration-300">
-      <span class="text-white text-2xl">🎥</span>
+      <span class="text-white text-2xl">{data.steps[2].icon}</span>
     </div>
-    <p class="text-xs font-semibold text-pink-600 mb-1 text-center">STEP 3</p>
-    <h3 class="text-lg font-semibold text-pink-600 text-center mb-2">Interview & Assess</h3>
-    <p class="text-gray-700 text-sm text-center">Meet candidates via video call or in-person sessions.</p>
+    <p class="text-xs font-semibold text-pink-600 mb-1 text-center">{data.steps[2].stepNo}</p>
+    <h3 class="text-lg font-semibold text-pink-600 text-center mb-2">{data.steps[2].title}</h3>
+    <p class="text-gray-700 text-sm text-center">{data.steps[2].description}</p>
   </div>
 
   <!-- Step 4 -->
@@ -64,11 +69,11 @@
               hover:shadow-2xl hover:scale-105 transform transition duration-300 ease-in-out animate-slideUp delay-300">
     <div class="flex items-center justify-center w-16 h-16 bg-yellow-500 rounded-full mx-auto mb-4 
                 hover:rotate-12 transition duration-300">
-      <span class="text-white text-2xl">📄</span>
+      <span class="text-white text-2xl">{data.steps[3].icon}</span>
     </div>
-    <p class="text-xs font-semibold text-yellow-600 mb-1 text-center">STEP 4</p>
-    <h3 class="text-lg font-semibold text-yellow-600 text-center mb-2">Paperwork & Training</h3>
-    <p class="text-gray-700 text-sm text-center">We handle MOM requirements, insurance, and pre-deployment training.</p>
+    <p class="text-xs font-semibold text-yellow-600 mb-1 text-center">{data.steps[3].stepNo}</p>
+    <h3 class="text-lg font-semibold text-yellow-600 text-center mb-2">{data.steps[3].title}</h3>
+    <p class="text-gray-700 text-sm text-center">{data.steps[3].description}</p>
   </div>
 
   <!-- Step 5 -->
@@ -76,51 +81,51 @@
               hover:shadow-2xl hover:scale-105 transform transition duration-300 ease-in-out animate-slideUp delay-400">
     <div class="flex items-center justify-center w-16 h-16 bg-pink-300 rounded-full mx-auto mb-4 
                 hover:rotate-12 transition duration-300">
-      <span class="text-white text-2xl">🏠</span>
+      <span class="text-white text-2xl">{data.steps[4].icon}</span>
     </div>
-    <p class="text-xs font-semibold text-pink-600 mb-1 text-center">STEP 5</p>
-    <h3 class="text-lg font-semibold text-pink-600 text-center mb-2">Deployment & Support</h3>
-    <p class="text-gray-700 text-sm text-center">Your chosen helper joins your family—we stay available for aftercare.</p>
+    <p class="text-xs font-semibold text-pink-600 mb-1 text-center">{data.steps[4].stepNo}</p>
+    <h3 class="text-lg font-semibold text-pink-600 text-center mb-2">{data.steps[4].title}</h3>
+    <p class="text-gray-700 text-sm text-center">{data.steps[4].description}</p>
   </div>
 </div>
 
   <!-- Why Choose Us -->
   <div class="max-w-7xl mx-auto mt-20 px-6">
     <h2 class="text-3xl md:text-4xl font-bold text-yellow-600 text-center mb-12 animate-fadeIn">
-        Why Choose Us
+        {data.choose[0]?.sectionTitle}
     </h2>
 
     <div class="space-y-10">
         <!-- Feature 1 -->
         <div class="flex items-start gap-6 animate-slideUp">
         <div class="flex-shrink-0 w-16 h-16 rounded-full bg-pink-600 flex items-center justify-center text-white text-3xl shadow-lg transform transition duration-300 hover:scale-110 hover:shadow-[0_0_25px_6px_rgba(245,185,221,0.6)]">
-            ✅
+            {data.choose[0]?.icon}
         </div>
         <div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Licensed & MOM-Compliant</h3>
-            <p class="text-gray-700">Fully registered and compliant with Singapore’s regulations for your peace of mind.</p>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{data.choose[0]?.reason}</h3>
+            <p class="text-gray-700">{data.choose[0]?.description}</p>
         </div>
         </div>
 
         <!-- Feature 2 -->
         <div class="flex items-start gap-6 animate-slideUp delay-100">
         <div class="flex-shrink-0 w-16 h-16 rounded-full bg-yellow-500 flex items-center justify-center text-white text-3xl shadow-lg transform transition duration-300 hover:scale-110 hover:shadow-[0_0_25px_6px_rgba(245,185,221,0.6)]">
-            ⭐
+            {data.choose[1]?.icon}
         </div>
         <div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Curated, Quality Matches</h3>
-            <p class="text-gray-700">We shortlist helpers based on skills, experience, language, and your unique needs.</p>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{data.choose[1]?.reason}</h3>
+            <p class="text-gray-700">{data.choose[1]?.description}</p>
         </div>
         </div>
 
         <!-- Feature 3 -->
         <div class="flex items-start gap-6 animate-slideUp delay-200">
         <div class="flex-shrink-0 w-16 h-16 rounded-full bg-pink-600 flex items-center justify-center text-white text-3xl shadow-lg transform transition duration-300 hover:scale-110 hover:shadow-[0_0_25px_6px_rgba(245,185,221,0.6)]">
-            🤝
+            {data.choose[2]?.icon}
         </div>
         <div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Support That Cares</h3>
-            <p class="text-gray-700">From interviews to aftercare, our team is here to make the journey smooth.</p>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{data.choose[2]?.reason}</h3>
+            <p class="text-gray-700">{data.choose[2]?.description}</p>
         </div>
         </div>
     </div>
@@ -131,28 +136,28 @@
 
   <!-- FAQ -->
   <div class="max-w-5xl mx-auto mt-16">
-    <h3 class="text-3xl font-bold text-pink-500 text-center mb-6">Quick FAQs</h3>
+    <h3 class="text-3xl font-bold text-pink-500 text-center mb-6">{data.faqs[0]?.sectionTitle}</h3>
     <div class="divide-y divide-gray-200 border border-gray-200 rounded-2xl overflow-hidden">
       <details class="p-5 group">
         <summary class="cursor-pointer font-semibold text-gray-900 flex items-center justify-between">
-          How long does matching usually take?
+          {data.faqs[0]?.question}
           <span class="text-pink-600 transition group-open:rotate-90">▶</span>
         </summary>
-        <p class="mt-3 text-gray-700">It depends on your requirements and availability of candidates. Many families complete matching within 1–3 weeks.</p>
+        <p class="mt-3 text-gray-700">{data.faqs[0]?.answer}</p>
       </details>
       <details class="p-5 group">
         <summary class="cursor-pointer font-semibold text-gray-900 flex items-center justify-between">
-          Can we interview helpers before deciding?
+          {data.faqs[1]?.question}
           <span class="text-pink-600 transition group-open:rotate-90">▶</span>
         </summary>
-        <p class="mt-3 text-gray-700">Yes—via video call or in person. We’ll help schedule and guide the conversation.</p>
+        <p class="mt-3 text-gray-700">{data.faqs[1]?.answer}</p>
       </details>
       <details class="p-5 group">
         <summary class="cursor-pointer font-semibold text-gray-900 flex items-center justify-between">
-          Do you handle insurance and MOM paperwork?
+          {data.faqs[2]?.question}
           <span class="text-pink-600 transition group-open:rotate-90">▶</span>
         </summary>
-        <p class="mt-3 text-gray-700">Absolutely. We cover medical/PAI insurance, Work Permit processing, and pre-deployment steps.</p>
+        <p class="mt-3 text-gray-700">{data.faqs[2]?.answer}</p>
       </details>
     </div>
   </div>

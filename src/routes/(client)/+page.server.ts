@@ -1,12 +1,28 @@
 import { db } from "$lib/server/db";
 import { eq } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";
-import { user } from "$lib/server/db/schema";
+import { user, globalContent, homepageHero, homepageWelcome, homepageRecognitions, homepageServices, homepageReviews } from "$lib/server/db/schema";
 
-export let load: PageServerLoad = async () => {
-    let user_ = await db.query.user.findFirst({
-        where: eq(user.id, "1")
-    })
+export const load: PageServerLoad = async () => {
+  // fetch a user (optional)
+  const user_ = await db.select().from(user).where(eq(user.id, "1")).limit(1);
+  // fetch global content
+  const content = await db.select().from(globalContent).limit(1);
+  // fetch homepage hero
+  const hero = await db.select().from(homepageHero).limit(1);
+  const welcome = await db.select().from(homepageWelcome).limit(1);
+  const recognitions = await db.select().from(homepageRecognitions).limit(1);
+  const services = await db.select().from(homepageServices);
+  const reviews = await db.select().from(homepageReviews);
+  
 
-    return user_
-}
+  return {
+    user: user_[0] ?? null,
+    globalContent: content[0] ?? null,
+    hero: hero[0] ?? null,
+    welcome: welcome[0] ?? null,
+    recognitions: recognitions[0] ?? null,
+    services,
+    reviews,
+  };
+};

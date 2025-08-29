@@ -9,11 +9,6 @@
   }: Props = $props()
   $inspect(data)
   
-  let reviews = [
-    { name: "Zuhaina", text: "Highly recommend for affordable, outstanding service." },
-    { name: "Michel Sim", text: "Very satisfied especially with quick service and support." },
-    { name: "Farah", text: "Professional agency with great follow-up and friendly staff." }
-  ];
 </script>
 
 <svelte:head>
@@ -25,21 +20,17 @@
 <section class="relative h-[50vh] flex items-center justify-center bg-gray-900 text-white">
   <!-- Background image -->
   <div class="absolute inset-0">
-    <img src="/images/header2.jpg" alt="Maid Agency Header" class="w-full h-full object-cover" />
+    <img src={data.hero?.bgImage} alt="Maid Agency Header" class="w-full h-full object-cover" />
     <!-- Overlay -->
     <div class="absolute inset-0 bg-black/50"></div>
   </div>
   <!-- Content -->
   <div class="relative text-center px-6 max-w-3xl">
     <h1 class="text-4xl md:text-4xl font-bold mb-4 drop-shadow-lg">
-      Maid Search Singapore: Find the Right Helper for Your Home with Ease {data?.username ?? 'no data'}
+      {data.hero?.mainHeading}
     </h1>
     <p class="mt-4 mb-12 text-gray-100 animate-fadeIn delay-200">
-      At Maid Search Singapore Pte Ltd, we believe that every family deserves a reliable 
-      and caring helper who truly understands their household needs. With our extensive 
-      network of experienced and qualified domestic helpers, we make it easy for you to 
-      find the right match—whether you require assistance with childcare, eldercare, 
-      cooking, or household management. 
+      {data.hero?.subheading}
     </p>
   </div>
 </section>
@@ -49,10 +40,7 @@
   <div class="max-w-5xl mx-auto px-6 text-center animate-fadeIn">
     <h2 class="text-3xl text-[#eb4fa7] font-bold mb-6">About Us</h2>
     <p class="text-lg text-gray-700 mb-6">
-      Maid Search Singapore Pte Ltd is a licensed employment agency dedicated to 
-      helping families find reliable, caring, and well-trained helpers. With years 
-      of experience and a strong commitment to excellence, we provide personalized 
-      matching services that meet every household’s unique needs.
+      {data.welcome.description}
     </p>
     <a href="/about" 
        class="inline-block px-6 py-3 rounded-full bg-[#eb4fa7] hover:bg-gradient-to-r from-[#f5b9dd] to-[#ebd07a] text-white font-semibold 
@@ -65,15 +53,14 @@
 <!-- AWARD SECTION -->
 <section class="py-16 bg-gray-50">
   <div class="max-w-4xl mx-auto px-6 text-center animate-slideUp">
-    <h2 class="text-3xl font-bold text-[#ebb84f] mb-6">Our Recognition</h2>
+    <h2 class="text-3xl font-bold text-[#ebb84f] mb-6">{data.recognitions?.sectionTitle}</h2>
     <p class="text-gray-700 text-lg mb-6">
-      Proud recipient of the <span class="font-semibold">Top 100 Singapore Excellence Award (2015)</span>, 
-      a testament to our commitment to professionalism and trusted service.
+      {data.recognitions?.caption}
     </p>
     <div class="flex justify-center">
       <!-- Trigger button (certificate image) -->
       <button data-modal-target="certificateModal" data-modal-toggle="certificateModal">
-        <img src="/images/certificate.jpg" 
+        <img src={data.recognitions?.urlImage}
              alt="Singapore Excellence Award Certificate" 
              class="w-64 rounded-xl shadow-lg hover:scale-105 transition cursor-pointer" />
       </button>
@@ -113,39 +100,39 @@
 <!-- SERVICES SECTION -->
 <section class="py-20 bg-gray-50">
   <div class="max-w-6xl mx-auto px-6 text-center">
-    <h2 class="text-3xl text-[#eb4fa7] font-bold mb-12">Our Services</h2>
+    <h2 class="text-3xl text-[#eb4fa7] font-bold mb-12">{data.services[0].title}</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       
       <!-- Myanmar Maids -->
       <div class="bg-white rounded-2xl shadow-lg p-8 transform transition duration-300 
         hover:scale-105 hover:shadow-[0_0_30px_10px_rgba(245,185,221,0.6)]">
-        <h3 class="text-2xl text-[#ebb84f] font-semibold mb-4">Myanmarese Maids</h3>
-        <p class="mb-4">Known for their hardworking nature and caring spirit, our Myanmar maids adapt quickly to family needs. Trained to meet local household standards, they bring reliable and efficient assistance to everyday living.</p>
+        <h3 class="text-2xl text-[#ebb84f] font-semibold mb-4">{data.services[0].maidType}</h3>
+        <p class="mb-4">{data.services[0].description}</p>
         <a href="/services/maid" class="text-pink-500 hover:text-[#D4AF37] italic">Learn More</a>
       </div>
 
       <!-- Indonesian Maids -->
       <div class="bg-white rounded-2xl shadow-lg p-8 transform transition duration-300 
         hover:scale-105 hover:shadow-[0_0_30px_10px_rgba(245,185,221,0.6)]">
-        <h3 class="text-2xl text-[#ebb84f] font-semibold mb-4">Indonesian Maids</h3>
-        <p class="mb-4">Known for their friendly personalities and strong skills in childcare, elderly care, and housekeeping, our Indonesian maids bring both care and efficiency to your home. Their nurturing nature ensures your loved ones are well looked after, while keeping your household neat and orderly.</p>
+        <h3 class="text-2xl text-[#ebb84f] font-semibold mb-4">{data.services[1].maidType}</h3>
+        <p class="mb-4">{data.services[1].description}</p>
         <a href="/services/maid" class="text-pink-500 hover:text-[#D4AF37] italic">Learn More</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS SECTION -->
+<!-- REVIEWS SECTION -->
 <section class="py-20 bg-white">
   <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-3xl text-[#ebb84f] font-bold text-center mb-12">What Our Clients Say</h2>
+    <h2 class="text-3xl text-[#ebb84f] font-bold text-center mb-12">{data.reviews[0]?.title}</h2>
     <div class="grid md:grid-cols-3 gap-8">
-      {#each reviews as review}
+      {#each data.reviews as review}
         <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-xl transition animate-fadeIn">
           
           <!-- Stars -->
           <div class="flex justify-center mb-3 text-[#ebb84f]">
-            {#each Array(5) as _}
+            {#each Array(5) as _, i}
               <svg xmlns="http://www.w3.org/2000/svg" 
                    viewBox="0 0 20 20" 
                    fill="currentColor" 
@@ -156,8 +143,8 @@
           </div>
 
           <!-- Review text -->
-          <p class="italic mb-4">“{review.text}”</p>
-          <p class="font-semibold text-[#eb4fa7]">- {review.name}</p>
+          <p class="italic mb-4">{review.reviewText}</p>
+          <p class="font-semibold text-[#eb4fa7]">- {review.reviewerName}</p>
         </div>
       {/each}
     </div>

@@ -1,18 +1,19 @@
 <script lang="ts">
+  let { data } = $props();
 // Lightweight scroll-reveal action (no extra libraries)
-function reveal(node: HTMLElement, opts = { threshold: 0.15, delay: 0 }) {
-  const { threshold, delay } = opts;
-  const onIntersect = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          node.classList.remove('opacity-0', 'translate-y-6');
-          node.classList.add('opacity-100', 'translate-y-0');
-        }, delay);
-        observer.unobserve(node);
-      }
-    });
-  };
+  function reveal(node: HTMLElement, opts = { threshold: 0.15, delay: 0 }) {
+    const { threshold, delay } = opts;
+    const onIntersect = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            node.classList.remove('opacity-0', 'translate-y-6');
+            node.classList.add('opacity-100', 'translate-y-0');
+          }, delay);
+          observer.unobserve(node);
+        }
+      });
+    };
 
   const io = new IntersectionObserver(onIntersect, { threshold });
   // start hidden
@@ -32,10 +33,10 @@ const toggleFaq = (i: number) => (openFaq = openFaq === i ? null : i);
 
 import { onMount } from "svelte";
 
-  let modalOpen = false;
-  let modalSrc = "";
+  let modalOpen = $state(false);
+  let modalSrc = $state("");
 
-  function openModal(src) {
+  function openModal(src: string) {
     modalSrc = src;
     modalOpen = true;
   }
@@ -52,17 +53,17 @@ import { onMount } from "svelte";
 </svelte:head>
 
 <!-- Maids Header -->
-<section class="relative bg-[url('/images/header3.jpg')] bg-cover bg-center bg-no-repeat py-32">
+<section class="relative bg-cover bg-center bg-no-repeat py-32"
+  style="background-image: url('{data.hero?.bgImage}')">
   <!-- Overlay -->
   <div class="absolute inset-0 bg-black/30"></div>
   <!-- Content -->
   <div use:reveal={{ delay: 0 }} class="relative max-w-4xl mx-auto text-center px-6 opacity-0 translate-y-6">
     <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
-      Maids
+      {data.hero?.mainHeading}
     </h1>
-    <p class="text-gray-100 md:text-lg leading-relaxed">
-      Searching for a friendly family to work for? Singapore provides a great opportunity with
-      supportive employers and a culture you can feel at home with.
+    <p class="text-gray-100 md:text-base leading-relaxed">
+      {data.hero?.subheading}
     </p>
   </div>
 </section>
@@ -146,82 +147,69 @@ import { onMount } from "svelte";
   </div>
 </section>
 
-<!-- Hero Illustration -->
-<section class= "py-20">
-    <div class="max-w-4xl mx-auto px-6">
-    <div use:reveal={{ delay: 120 }} class="opacity-0 translate-y-6">
-      <div class="relative">
-        <div class="absolute -inset-6 rounded-3xl bg-gradient-to-tr from-pink-200 to-amber-200 blur-2xl opacity-60"></div>
-        <div class="relative bg-white rounded-3xl border shadow-xl p-6 md:p-8">
-          <div class="grid grid-cols-3 gap-4">
-            <div class="col-span-2 space-y-4">
-              <div class="h-24 rounded-xl bg-pink-50 border flex items-center justify-center">
-                <span class="text-sm text-pink-700 font-medium">Friendly Families</span>
-              </div>
-              <div class="h-24 rounded-xl bg-amber-50 border flex items-center justify-center">
-                <span class="text-sm text-amber-700 font-medium">Safe Environment</span>
-              </div>
-            </div>
-            <div class="space-y-4">
-              <div class="h-24 rounded-xl bg-emerald-50 border flex items-center justify-center">
-                <span class="text-sm text-emerald-700 font-medium">Skill Growth</span>
-              </div>
-              <div class="h-24 rounded-xl bg-pink-100 border flex items-center justify-center">
-                <span class="text-sm text-pink-700 font-medium">Good Salary</span>
-              </div>
-            </div>
-          </div>
-          <p class="mt-6 text-sm text-gray-500 text-center">Opportunities to thrive in Singapore</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- 📌 Gallery Section -->
 <section class="max-w-6xl mx-auto px-6 py-16">
   <h2 class="text-2xl md:text-3xl font-bold text-pink-500 text-center mb-8">
-    Gallery Highlights
+    {data.galleries[0].title}
   </h2>
 
   <p class="text-gray-600 text-center max-w-3xl mx-auto mb-10">
-    Discover moments that reflect our dedication and values. From training sessions and family 
-    matches to agency events, our gallery showcases the people and stories behind 
-    <span class="font-semibold text-pink-300">Maid Search Singapore Pte Ltd</span>. Each highlight 
-    captures our commitment to professionalism, care, and building trusted relationships between 
-    families and helpers.
+    {data.galleries[0].description} 
+    <span class="font-semibold text-pink-300">{data.galleries[1].description} </span>. {data.galleries[2].description} 
   </p>
   
   <!-- Masonry Grid -->
   <div class="columns-2 md:columns-3 gap-4 space-y-4">
-    <img src="/images/gallery1.jpg" alt="Gallery 1"
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <!-- svelte-ignore event_directive_deprecated -->
+    <img src={data.galleryImages[0].imageUrl} alt={data.galleryImages[0].alt}
          class="w-full rounded-xl shadow-md cursor-pointer hover:opacity-80 transition"
-         on:click={() => openModal('/images/gallery1.jpg')}>
-    <img src="/images/gallery2.jpg" alt="Gallery 2"
+         on:click={() => openModal(data.galleryImages[0].imageUrl)}>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <!-- svelte-ignore event_directive_deprecated -->
+    <img src={data.galleryImages[1].imageUrl} alt={data.galleryImages[1].alt}
          class="w-full rounded-xl shadow-md cursor-pointer hover:opacity-80 transition"
-         on:click={() => openModal('/images/gallery2.jpg')}>
-    <img src="/images/gallery3.jpg" alt="Gallery 3"
+         on:click={() => openModal(data.galleryImages[1].imageUrl)}>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <!-- svelte-ignore event_directive_deprecated -->
+    <img src={data.galleryImages[2].imageUrl} alt={data.galleryImages[2].alt}
          class="w-full rounded-xl shadow-md cursor-pointer hover:opacity-80 transition"
-         on:click={() => openModal('/images/gallery3.jpg')}>
-    <img src="/images/gallery4.jpg" alt="Gallery 4"
+         on:click={() => openModal(data.galleryImages[2].imageUrl)}>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <!-- svelte-ignore event_directive_deprecated -->
+    <img src={data.galleryImages[3].imageUrl} alt={data.galleryImages[3].alt}
          class="w-full rounded-xl shadow-md cursor-pointer hover:opacity-80 transition"
-         on:click={() => openModal('/images/gallery4.jpg')}>
-    <img src="/images/gallery5.jpg" alt="Gallery 5"
+         on:click={() => openModal(data.galleryImages[3].imageUrl)}>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <!-- svelte-ignore event_directive_deprecated -->
+    <img src={data.galleryImages[4].imageUrl} alt={data.galleryImages[4].alt}
          class="w-full rounded-xl shadow-md cursor-pointer hover:opacity-80 transition"
-         on:click={() => openModal('/images/gallery5.jpg')}>
-    <img src="/images/gallery6.jpg" alt="Gallery 6"
+         on:click={() => openModal(data.galleryImages[4].imageUrl)}>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <!-- svelte-ignore event_directive_deprecated -->
+    <img src={data.galleryImages[5].imageUrl} alt={data.galleryImages[5].alt}
          class="w-full rounded-xl shadow-md cursor-pointer hover:opacity-80 transition"
-         on:click={() => openModal('/images/gallery6.jpg')}>
-    <img src="/images/gallery7.jpg" alt="Gallery 7"
+         on:click={() => openModal(data.galleryImages[5].imageUrl)}>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <!-- svelte-ignore event_directive_deprecated -->
+    <img src={data.galleryImages[6].imageUrl} alt={data.galleryImages[6].alt}
          class="w-full rounded-xl shadow-md cursor-pointer hover:opacity-80 transition"
-         on:click={() => openModal('/images/gallery7.jpg')}>
+         on:click={() => openModal(data.galleryImages[6].imageUrl)}>
   </div>
 </section>
 
 <!-- Modal -->
 {#if modalOpen}
-<div class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999]">
   <!-- Close Button -->
+  <!-- svelte-ignore event_directive_deprecated -->
   <button on:click={closeModal} class="absolute top-5 right-5 text-white text-3xl font-bold">
     ✕
   </button>
@@ -275,34 +263,34 @@ import { onMount } from "svelte";
 <section class="max-w-6xl mx-auto px-6 py-10">
   <div class="rounded-3xl bg-gradient-to-r from-pink-50 to-yellow-50 border border-pink-100 p-8">
     
-    <h2 class="text-2xl text-center font-bold text-pink-500">How to Apply</h2>
+    <h2 class="text-2xl text-center font-bold text-pink-500">{data.steps[0].sectiontitle}</h2>
     <ol class="mt-4 grid md:grid-cols-4 gap-6">
       <li use:reveal class="opacity-0 translate-y-6">
         <div class="h-full rounded-2xl bg-white border p-5">
-          <p class="text-sm text-gray-500">Step 1</p>
-          <p class="font-semibold text-gray-800 mt-1">Say Hello on WhatsApp</p>
-          <p class="text-sm text-gray-600 mt-2">Message us at <span class="font-medium">+65 9682 5955</span>.</p>
+          <p class="text-sm text-gray-500">{data.steps[0].stepNumber}</p>
+          <p class="font-semibold text-gray-800 mt-1">{data.steps[0].title}</p>
+          <p class="text-sm text-gray-600 mt-2">{data.steps[0].description} <span class="font-medium">{data.steps[4].description}</span></p>
         </div>
       </li>
       <li use:reveal={{ delay: 80 }} class="opacity-0 translate-y-6">
         <div class="h-full rounded-2xl bg-white border p-5">
-          <p class="text-sm text-gray-500">Step 2</p>
-          <p class="font-semibold text-gray-800 mt-1">Short Interview</p>
-          <p class="text-sm text-gray-600 mt-2">We understand your skills and preferences.</p>
+          <p class="text-sm text-gray-500">{data.steps[1].stepNumber}</p>
+          <p class="font-semibold text-gray-800 mt-1">{data.steps[1].title}</p>
+          <p class="text-sm text-gray-600 mt-2">{data.steps[1].description}</p>
         </div>
       </li>
       <li use:reveal={{ delay: 160 }} class="opacity-0 translate-y-6">
         <div class="h-full rounded-2xl bg-white border p-5">
-          <p class="text-sm text-gray-500">Step 3</p>
-          <p class="font-semibold text-gray-800 mt-1">Training & Documents</p>
-          <p class="text-sm text-gray-600 mt-2">We guide you through every requirement.</p>
+          <p class="text-sm text-gray-500">{data.steps[2].stepNumber}</p>
+          <p class="font-semibold text-gray-800 mt-1">{data.steps[2].title}</p>
+          <p class="text-sm text-gray-600 mt-2">{data.steps[2].description}</p>
         </div>
       </li>
       <li use:reveal={{ delay: 240 }} class="opacity-0 translate-y-6">
         <div class="h-full rounded-2xl bg-white border p-5">
-          <p class="text-sm text-gray-500">Step 4</p>
-          <p class="font-semibold text-gray-800 mt-1">Placement</p>
-          <p class="text-sm text-gray-600 mt-2">Join a respectful family in Singapore.</p>
+          <p class="text-sm text-gray-500">{data.steps[3].stepNumber}</p>
+          <p class="font-semibold text-gray-800 mt-1">{data.steps[3].title}</p>
+          <p class="text-sm text-gray-600 mt-2">{data.steps[3].description}</p>
         </div>
       </li>
     </ol>
@@ -329,47 +317,46 @@ import { onMount } from "svelte";
 
 <!-- FAQ -->
 <section class="max-w-3xl mx-auto px-6 py-12">
-  <h2 class="text-2xl md:text-3xl font-bold text-yellow-600 text-center">Frequently Asked Questions</h2>
+  <h2 class="text-2xl md:text-3xl font-bold text-yellow-600 text-center">{data.faqs[0].sectiontitle}</h2>
   
   <div class="mt-6 divide-y divide-gray-200 border border-gray-200 rounded-2xl overflow-hidden">
     <details class="p-5 group">
       <summary class="cursor-pointer font-semibold text-gray-900 flex items-center justify-between">
-        Who can apply?
+        {data.faqs[0].question}
         <span class="text-pink-600 transition group-open:rotate-90">▶</span>
       </summary>
       <p class="mt-3 text-gray-700">
-        Myanmarese and Indonesian helpers aged 23–50 with a valid passport and good health are welcome. 
-        If you are outside this range, contact us and we will advise.
+        {data.faqs[0].answer}
       </p>
     </details>
 
     <details class="p-5 group">
       <summary class="cursor-pointer font-semibold text-gray-900 flex items-center justify-between">
-        Do you provide training?
+        {data.faqs[1].question}
         <span class="text-pink-600 transition group-open:rotate-90">▶</span>
       </summary>
       <p class="mt-3 text-gray-700">
-        Yes. We offer pre-employment training focusing on safety, hygiene, childcare/eldercare, and basic household management.
+        {data.faqs[1].answer}
       </p>
     </details>
 
     <details class="p-5 group">
       <summary class="cursor-pointer font-semibold text-gray-900 flex items-center justify-between">
-        Is accommodation provided?
+        {data.faqs[2].question}
         <span class="text-pink-600 transition group-open:rotate-90">▶</span>
       </summary>
       <p class="mt-3 text-gray-700">
-        Live-in arrangements are standard in Singapore. Families provide accommodation and meals as part of employment.
+        {data.faqs[2].answer}
       </p>
     </details>
 
     <details class="p-5 group">
       <summary class="cursor-pointer font-semibold text-gray-900 flex items-center justify-between">
-        What support do I get after placement?
+        {data.faqs[3].question}
         <span class="text-pink-600 transition group-open:rotate-90">▶</span>
       </summary>
       <p class="mt-3 text-gray-700">
-        We stay in touch to ensure you are treated fairly and help with any documentation or mediation if needed.
+        {data.faqs[3].answer}
       </p>
     </details>
   </div>

@@ -2,7 +2,8 @@
 	import '../../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import 'flowbite';
-	let { children } = $props();
+	let { data, children } = $props();
+  const footer = data.globalContent;
 </script>
 
 <svelte:head>
@@ -105,7 +106,7 @@
 
 <!-- Floating WhatsApp CTA  -->
 <a
-  href="https://wa.me/6596825955"
+  href="{footer?.whatsappLink}"
   target="_blank"
   rel="noopener"
   class="fixed bottom-4 right-4 inline-flex items-center gap-2 rounded-full px-5 py-3 text-white bg-pink-300 hover:bg-gradient-to-r from-[#f5b9dd] to-[#ebd07a] shadow-lg active:scale-[0.98] transition"
@@ -137,7 +138,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0 text-white" fill="currentColor" viewBox="0 0 24 24">
           <path d="M22 12a10 10 0 1 0-11.5 9.9v-7H8v-3h2.5V9.5c0-2.5 1.5-3.9 3.7-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.5V12H16l-.5 3h-2.2v7A10 10 0 0 0 22 12z"/>
         </svg>
-        <a href="https://www.facebook.com/maidsearch" target="_blank" class="hover:italic">
+        <a href={footer?.facebookLink} target="_blank" class="hover:italic">
           Maid Search Singapore Pte Ltd
         </a>
       </p>
@@ -151,7 +152,7 @@
             01-2 2h-1C10.61 21 3 13.39 3 5V5z" />
         </svg>
         <a href="tel:+6596825955" class="hover:italic">
-          +65 9682 5955 (Guo Siling Dior)
+          {footer?.phone}
         </a>
       </p>
     </div>
@@ -186,11 +187,11 @@
 
   <!-- Company Info -->
   <div class="mt-8 text-center text-xs text-white/80 space-y-1">
-    <p>License No: L13C8379</p>
-    <p>Company Registration No: 201303653G</p>
-    <p>Employment Agency Registration No: R1327454</p>
+    <p>License No: {footer?.licenseNo}</p>
+    <p>Company Registration No: {footer?.companyNo}</p>
+    <p>Employment Agency Registration No: {footer?.empRegNo}</p>
   </div>
 
   <!-- Copyright -->
-  <div class="mt-4 text-center text-sm font-bold">&copy; 2025 Maid Search Singapore Pte Ltd. All Rights Reserved.</div>
+  <div class="mt-4 text-center text-sm font-bold">{footer?.copyright}</div>
 </footer>
