@@ -1,11 +1,19 @@
 <script lang="ts">
   export let form;
+  import "/src/app.css"
   let showPassword = false;
 </script>
 
-<section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-400 via-pink-300 to-yellow-300">
+<svelte:head>
+  <title>Admin Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</svelte:head>
+
+<section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-400 via-pink-300 to-yellow-200">
   <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
-    <h1 class="text-2xl font-bold text-center mb-6 text-gray-800">Login</h1>
+    <h2 class="text-xl font-bold text-center text-gray-500">Maid Search Singapore Pte Ltd</h2>
+    <h1 class="text-xl font-bold text-center mb-6 text-pink-300">Admin Login</h1>
 
     <form method="POST" class="flex flex-col space-y-4">
       <!-- Username -->
@@ -46,16 +54,14 @@
       </div>
 
       <!-- Error message -->
-      {#if form?.error}
-        <p class="text-red-600 text-sm">{form.error}</p>
+      {#if form?.message}
+        <p class="text-red-600 text-sm">{form.message}</p>
       {/if}
 
       <!-- Submit -->
       <button
         type="submit"
-        class="rounded-2xl bg-pink-500 hover:bg-yellow-400 text-white font-semibold py-2 transition-colors"
-      >
-        Login
+        class="rounded-2xl bg-pink-300 hover:bg-gradient-to-r from-[#f5b9dd] to-[#e9cc6f] text-white font-semibold py-2 px-6 transition-all duration-300">Login
       </button>
     </form>
   </div>

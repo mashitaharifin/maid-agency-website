@@ -4,5 +4,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	base: "/maid-agency-website/",
-	plugins: [tailwindcss(), sveltekit()],
+	plugins: [
+		tailwindcss(), sveltekit()
+	],
 });

@@ -29,7 +29,7 @@
     <h1 class="text-4xl md:text-4xl font-bold mb-4 drop-shadow-lg">
       {data.hero?.mainHeading}
     </h1>
-    <p class="mt-4 mb-12 text-gray-100 animate-fadeIn delay-200">
+    <p class="mt-4 mb-12 text-gray-100 text-xl animate-fadeIn delay-200">
       {data.hero?.subheading}
     </p>
   </div>
@@ -70,7 +70,7 @@
 
 <!-- Modal -->
 <div id="certificateModal" tabindex="-1" aria-hidden="true"
-     class="hidden fixed inset-0 z-50 flex items-center justify-center w-full h-full overflow-y-auto overflow-x-hidden 
+     class="hidden fixed inset-0 z-50 items-center justify-center w-full h-full overflow-y-auto overflow-x-hidden 
             bg-black/50 backdrop-blur-sm">
   <div class="relative p-4 w-full max-w-3xl">
     <!-- Modal content -->

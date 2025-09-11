@@ -1,0 +1,101 @@
+// src/routes/admin/home/+page.server.ts
+import { fail, redirect } from "@sveltejs/kit";
+import { db, schema } from "$lib/server/db";
+import { asc, eq } from "drizzle-orm";
+import { logActivity } from "$lib/server/activityLogger";
+
+export const load = async () => {
+  const hero = await db.query.homepageHero.findFirst();
+  const welcome = await db.query.homepageWelcome.findFirst();
+  const recognitions = await db.query.homepageRecognitions.findFirst();
+  const services = await db.query.homepageServices.findMany();
+  const reviews = await db.query.homepageReviews.findMany({orderBy: [asc(schema.homepageReviews.id)]});
+
+  return {
+    hero,
+    welcome,
+    recognitions,
+    services,
+    reviews
+  };
+};
+
+export const actions = {
+  updateHero: async ({ request }) => {
+    const form = await request.formData();
+    const id = Number(form.get("id"));
+    const mainHeading = form.get("mainHeading") as string;
+    const subheading = form.get("subheading") as string;
+    const bgImage = form.get("bgImage") as string;
+
+    await db
+      .update(schema.homepageHero)
+      .set({ mainHeading, subheading, bgImage })
+      .where(eq(schema.homepageHero.id, id));
+
+      await logActivity("Home - Hero");
+      return { success: "Hero section updated successfully!" };
+  },
+
+  updateWelcome: async ({ request }) => {
+    const form = await request.formData();
+    const id = Number(form.get("id"));
+    const description = form.get("description") as string;
+
+    await db
+      .update(schema.homepageWelcome)
+      .set({ description })
+      .where(eq(schema.homepageWelcome.id, id));
+
+    await logActivity("Home - Welcome");
+    return { success: "Welcome section updated successfully!" };
+  },
+
+  updateRecognitions: async ({ request }) => {
+    const form = await request.formData();
+    const id = Number(form.get("id"));
+    const sectionTitle = form.get("sectionTitle") as string;
+    const caption = form.get("caption") as string;
+    const urlImage = form.get("urlImage") as string;
+
+    await db
+      .update(schema.homepageRecognitions)
+      .set({ sectionTitle, caption, urlImage })
+      .where(eq(schema.homepageRecognitions.id, id));
+
+    await logActivity("Home - Recognitions");
+    return { success: "Recognitions section updated successfully!" };
+  },
+
+  updateService: async ({ request }) => {
+    const form = await request.formData();
+    const id = Number(form.get("id"));
+    const title = form.get("title") as string;
+    const maidType = form.get("maidType") as string;
+    const description = form.get("description") as string;
+
+    await db
+      .update(schema.homepageServices)
+      .set({ title, maidType, description })
+      .where(eq(schema.homepageServices.id, id));
+
+    await logActivity("Home - Services");
+    return { success: "Service updated successfully!" };
+  },
+
+  updateReview: async ({ request }) => {
+    const form = await request.formData();
+    const id = Number(form.get("id"));
+    const title = form.get("title") as string;
+    const reviewText = form.get("reviewText") as string;
+    const reviewerName = form.get("reviewerName") as string;
+
+    await db
+      .update(schema.homepageReviews)
+      .set({ title, reviewText, reviewerName })
+      .where(eq(schema.homepageReviews.id, id));
+
+    await logActivity("Home - Reviews");
+    return { success: "Review updated successfully!" };
+  }
+};

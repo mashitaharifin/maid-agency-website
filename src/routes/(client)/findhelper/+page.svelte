@@ -1,5 +1,6 @@
 <script>
     let { data } = $props();
+    // @ts-ignore
     const steps = data.helperSteps;
 </script>
 

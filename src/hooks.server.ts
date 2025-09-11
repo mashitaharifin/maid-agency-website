@@ -1,28 +1,36 @@
+// src/hooks.server.ts
+import { lucia } from "$lib/server/lucia";
 import type { Handle } from '@sveltejs/kit';
-import * as auth from '$lib/server/auth';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const sessionToken = event.cookies.get(auth.sessionCookieName);
-	console.log("🔑 hooks: cookie from browser →", sessionToken);
+    const sessionId = event.cookies.get(lucia.sessionCookieName);
+    
+    if (!sessionId) {
+        event.locals.user = null;
+        event.locals.session = null;
+        return resolve(event);
+    }
 
-	if (!sessionToken) {
-		console.log("❌ hooks: no session token, setting user=null");
-		event.locals.user = null;
-		event.locals.session = null;
-		return resolve(event);
-	}
-
-	const { session, user } = await auth.validateSessionToken(sessionToken);
-	console.log("🔍 hooks: validate result →", { session, user });
-
-	if (session) {
-		auth.setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
-	} else {
-		auth.deleteSessionTokenCookie(event.cookies);
-	}
-
-	event.locals.user = user;
-	event.locals.session = session;
-	console.log("✅ hooks: locals.user set to →", user);
-	return resolve(event);
+    const { session, user } = await lucia.validateSession(sessionId);
+    
+    if (session && session.fresh) {
+        const sessionCookie = lucia.createSessionCookie(session.id);
+        event.cookies.set(sessionCookie.name, sessionCookie.value, {
+            path: ".",
+            ...sessionCookie.attributes
+        });
+    }
+    
+    if (!session) {
+        const sessionCookie = lucia.createBlankSessionCookie();
+        event.cookies.set(sessionCookie.name, sessionCookie.value, {
+            path: ".",
+            ...sessionCookie.attributes
+        });
+    }
+    
+    event.locals.user = user;
+    event.locals.session = session;
+    
+    return resolve(event);
 };

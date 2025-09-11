@@ -2,7 +2,7 @@ import { hash, verify } from '@node-rs/argon2';
 import { encodeBase32LowerCase } from '@oslojs/encoding';
 import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import * as auth from '$lib/server/auth';
+import * as auth from '$lib/server/lucia';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
@@ -29,8 +29,8 @@ export const actions: Actions = {
 
 		const results = await db
 			.select()
-			.from(table.user)
-			.where(eq(table.user.username, username));
+			.from(table.users)
+			.where(eq(table.users.username, username));
 
 		const existingUser = results.at(0);
 		if (!existingUser) {
@@ -48,9 +48,8 @@ export const actions: Actions = {
 		}
 
 		const sessionToken = auth.generateSessionToken();
-		const session = await auth.createSession(sessionToken, existingUser.id);
-		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
-
+		auth.deleteSessionTokenCookie(event, sessionToken, table.sessions.expiresAt);
+		await auth.createSession(sessionToken, existingUser.id.toString());
 		return redirect(302, '/demo/lucia');
 	},
 	register: async (event) => {
@@ -75,11 +74,9 @@ export const actions: Actions = {
 		});
 
 		try {
-			await db.insert(table.user).values({ id: userId, username, passwordHash });
-
+			await db.insert(table.users).values({ id: String(userId), username, passwordHash });
 			const sessionToken = auth.generateSessionToken();
-			const session = await auth.createSession(sessionToken, userId);
-			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
+			auth.deleteSessionTokenCookie(event, sessionToken, table.sessions.expiresAt);
 		} catch {
 			return fail(500, { message: 'An error has occurred' });
 		}
@@ -88,9 +85,11 @@ export const actions: Actions = {
 };
 
 function generateUserId() {
-	// ID with 120 bits of entropy, or about the same as UUID v4.
-	const bytes = crypto.getRandomValues(new Uint8Array(15));
-	const id = encodeBase32LowerCase(bytes);
+	// Generate a random 53-bit integer (safe for JS numbers)
+	const array = new Uint32Array(2);
+    crypto.getRandomValues(array);
+    // Combine two 32-bit numbers into one 53-bit number
+    const id = (array[0] * 0x100000000 + array[1]) % Number.MAX_SAFE_INTEGER;
 	return id;
 }
 

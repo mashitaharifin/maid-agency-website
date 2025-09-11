@@ -4,7 +4,7 @@ import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async () => {
   
-  const hero = await db.select().from(trainingHero).orderBy(trainingHero.id);
+  const [hero] = await db.select().from(trainingHero).orderBy(trainingHero.id).limit(1);
   const plans = await db.select().from(trainingPlans);
   const trainingsData = await db.select().from(trainings).orderBy(trainings.id)
 

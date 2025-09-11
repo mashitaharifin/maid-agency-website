@@ -1,4 +1,5 @@
 // src/lib/server/db.ts
+// Minimal setup using pg driver, no schema integration.
 import { Pool } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
 

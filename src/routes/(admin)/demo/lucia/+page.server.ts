@@ -1,7 +1,7 @@
-import * as auth from '$lib/server/auth';
-import { fail, redirect } from '@sveltejs/kit';
+import * as auth from '$lib/server/lucia';
+import { fail, redirect, type RequestEvent } from '@sveltejs/kit';
 import { getRequestEvent } from '$app/server';
-import type { Actions, PageServerLoad } from './$types';
+import type { Actions, PageServerLoad, RouteParams } from './$types';
 
 export const load: PageServerLoad = async () => {
 	const user = requireLogin()
@@ -14,7 +14,6 @@ export const actions: Actions = {
 			return fail(401);
 		}
 		await auth.invalidateSession(event.locals.session.id);
-		auth.deleteSessionTokenCookie(event);
 
 		return redirect(302, '/demo/lucia/login');
 	},

@@ -29,7 +29,7 @@
 		"@types/node": "^22.18.0",
 		"@types/pg": "^8.15.5",
 		"autoprefixer": "^10.4.21",
-		"drizzle-kit": "^0.30.2",
+		"drizzle-kit": "^0.30.6",
 		"gh-pages": "^6.3.0",
 		"postcss": "^8.5.6",
 		"svelte": "^5.0.0",
@@ -40,15 +40,20 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
+		"@lucia-auth/adapter-drizzle": "^1.1.0",
 		"@node-rs/argon2": "^2.0.2",
 		"@oslojs/crypto": "^1.0.1",
 		"@oslojs/encoding": "^1.1.0",
 		"bcrypt": "^6.0.0",
 		"bcryptjs": "^3.0.2",
-		"drizzle-orm": "^0.40.0",
+		"dayjs": "^1.11.18",
+		"dotenv": "^17.2.2",
+		"drizzle-orm": "^0.40.1",
 		"flowbite": "^3.1.2",
+		"lucia": "^3.2.2",
 		"lucide-svelte": "^0.542.0",
+		"oslo": "^1.2.1",
 		"pg": "^8.16.3",
-		"postgres": "^3.4.5"
+		"postgres": "^3.4.7"
 	}
 }

@@ -1,16 +1,28 @@
-import type { LayoutServerLoad } from './$types';
-import { redirect } from '@sveltejs/kit';
+// src/routes/(admin)/admin/+layout.server.ts
+import type { LayoutServerLoad } from "./$types";
+//import { lucia } from "$lib/server/lucia";
+//import { redirect } from "@sveltejs/kit";
 
-export const load: LayoutServerLoad = async ({ url, locals }) => {
-  const user = locals.user;
+//export const load: LayoutServerLoad = async ({ cookies }) => {
+//  const sessionId = cookies.get(lucia.sessionCookieName);
+//  const { session, user } = sessionId
+//    ? await lucia.validateSession(sessionId)
+//   : { session: null, user: null };
 
-  if (url.pathname === '/admin/login') {
-    if (user) throw redirect(302, '/admin'); // already logged in
-    return { user: null };
-  }
+  // Protect all /admin routes
+//  if (!session) throw redirect(302, "/auth/login");
+//  return { user };
+//};
 
-  // all other /admin pages must be logged in
-  if (!user) throw redirect(302, '/admin/login');
+//temporary bypass for development
 
-  return { user };
+export const load: LayoutServerLoad = async () => {
+    // ⚠️ Temporary bypass: pretend you're logged in
+    return {
+        user: {
+            id: 'dev-user',
+            name: 'Developer',
+            role: 'admin'
+        }
+    };
 };

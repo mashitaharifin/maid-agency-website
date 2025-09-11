@@ -73,37 +73,37 @@ import { onMount } from "svelte";
 <section id="why-singapore" class="max-w-6xl mx-auto px-6 py-14">
   <div class="grid md:grid-cols-2 gap-10 items-start">
     <div use:reveal class="opacity-0 translate-y-6">
-      <h2 class="text-2xl md:text-3xl font-bold text-pink-500">Why Work in Singapore?</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-pink-500">{data.reasons[0].category}</h2>
       <p class="mt-3 text-gray-600">
-        Helpers in Singapore benefit from reliable employers, strong protections, and a multicultural community.
+        {data.reasons[0].category_desc}
       </p>
       <ul class="mt-6 space-y-4">
         <li class="flex items-start gap-3">
-          <span class="mt-1 inline-flex h-7 w-7 rounded-full bg-emerald-100 items-center justify-center">💰</span>
+          <span class="mt-1 inline-flex h-7 w-7 rounded-full bg-emerald-100 items-center justify-center">{data.reasons[0].icon}</span>
           <div>
-            <p class="font-semibold text-gray-800">Competitive Salary</p>
-            <p class="text-gray-600 text-sm">Earn more than typical local opportunities.</p>
+            <p class="font-semibold text-gray-800">{data.reasons[0].title}</p>
+            <p class="text-gray-600 text-sm">{data.reasons[0].description}</p>
           </div>
         </li>
         <li class="flex items-start gap-3">
-          <span class="mt-1 inline-flex h-7 w-7 rounded-full bg-blue-100 items-center justify-center">🏡</span>
+          <span class="mt-1 inline-flex h-7 w-7 rounded-full bg-blue-100 items-center justify-center">{data.reasons[1].icon}</span>
           <div>
-            <p class="font-semibold text-gray-800">Safe & Supportive</p>
-            <p class="text-gray-600 text-sm">Live with caring families in a safe city.</p>
+            <p class="font-semibold text-gray-800">{data.reasons[1].title}</p>
+            <p class="text-gray-600 text-sm">{data.reasons[1].description}</p>
           </div>
         </li>
         <li class="flex items-start gap-3">
-          <span class="mt-1 inline-flex h-7 w-7 rounded-full bg-amber-100 items-center justify-center">📚</span>
+          <span class="mt-1 inline-flex h-7 w-7 rounded-full bg-amber-100 items-center justify-center">{data.reasons[2].icon}</span>
           <div>
-            <p class="font-semibold text-gray-800">Learn New Skills</p>
-            <p class="text-gray-600 text-sm">Childcare, eldercare, cooking, and more.</p>
+            <p class="font-semibold text-gray-800">{data.reasons[2].title}</p>
+            <p class="text-gray-600 text-sm">{data.reasons[2].description}</p>
           </div>
         </li>
         <li class="flex items-start gap-3">
           <span class="mt-1 inline-flex h-7 w-7 rounded-full bg-pink-100 items-center justify-center">🌏</span>
           <div>
-            <p class="font-semibold text-gray-800">Welcoming Community</p>
-            <p class="text-gray-600 text-sm">Meet friends from many cultures.</p>
+            <p class="font-semibold text-gray-800">{data.reasons[3].title}</p>
+            <p class="text-gray-600 text-sm">{data.reasons[3].description}</p>
           </div>
         </li>
       </ul>
@@ -111,35 +111,35 @@ import { onMount } from "svelte";
 
     <!-- Why Work With Us -->
     <div use:reveal={{ delay: 120 }} class="opacity-0 translate-y-6">
-      <h2 class="text-2xl md:text-3xl font-bold text-pink-500">Why Work With Us?</h2>
-      <p class="mt-3 text-gray-600">A trusted agency that supports you before and after placement.</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-pink-500">{data.reasons[4].category}</h2>
+      <p class="mt-3 text-gray-600">{data.reasons[4].category_desc}</p>
       <ul class="mt-6 space-y-4">
         <li class="flex items-start gap-3">
           <span class="mt-1 inline-flex h-7 w-7 rounded-full bg-indigo-100 items-center justify-center">✅</span>
           <div>
-            <p class="font-semibold text-gray-800">Trusted Placements</p>
-            <p class="text-gray-600 text-sm">Proven track record with caring employers.</p>
+            <p class="font-semibold text-gray-800">{data.reasons[4].title}</p>
+            <p class="text-gray-600 text-sm">{data.reasons[4].description}</p>
           </div>
         </li>
         <li class="flex items-start gap-3">
           <span class="mt-1 inline-flex h-7 w-7 rounded-full bg-rose-100 items-center justify-center">🤝</span>
           <div>
-            <p class="font-semibold text-gray-800">Fair & Respectful</p>
-            <p class="text-gray-600 text-sm">We advocate for your rights and wellbeing.</p>
+            <p class="font-semibold text-gray-800">{data.reasons[5].title}</p>
+            <p class="text-gray-600 text-sm">{data.reasons[5].description}</p>
           </div>
         </li>
         <li class="flex items-start gap-3">
           <span class="mt-1 inline-flex h-7 w-7 rounded-full bg-teal-100 items-center justify-center">🎓</span>
           <div>
-            <p class="font-semibold text-gray-800">Pre-Employment Training</p>
-            <p class="text-gray-600 text-sm">Get prepared for success before your first day.</p>
+            <p class="font-semibold text-gray-800">{data.reasons[6].title}</p>
+            <p class="text-gray-600 text-sm">{data.reasons[6].description}</p>
           </div>
         </li>
         <li class="flex items-start gap-3">
           <span class="mt-1 inline-flex h-7 w-7 rounded-full bg-fuchsia-100 items-center justify-center">🛡️</span>
           <div>
-            <p class="font-semibold text-gray-800">Documents & Insurance</p>
-            <p class="text-gray-600 text-sm">We handle the paperwork so you don’t have to.</p>
+            <p class="font-semibold text-gray-800">{data.reasons[7].title}</p>
+            <p class="text-gray-600 text-sm">{data.reasons[7].description}</p>
           </div>
         </li>
       </ul>
@@ -228,32 +228,32 @@ import { onMount } from "svelte";
     <!-- Myanmarese -->
     <article use:reveal class="opacity-0 translate-y-6 p-7 rounded-2xl border border-pink-300 bg-white shadow-sm hover:shadow-xl transition hover:-translate-y-1">
       <div class="flex items-center gap-3">
-        <span class="text-2xl">🇲🇲</span>
-        <h3 class="text-xl font-semibold text-pink-500">Myanmarese Maids</h3>
+        <span class="text-2xl">{data.nationalities[0].flag}</span>
+        <h3 class="text-xl font-semibold text-pink-500">{data.nationalities[0].title}</h3>
       </div>
       <p class="mt-3 text-gray-600">
-        Known for adaptability and dedication. Many are quick learners and adjust well to Singaporean households.
+        {data.nationalities[0].description}
       </p>
       <ul class="mt-4 text-sm text-gray-700 space-y-2">
-        <li>• Strong work ethic and patience</li>
-        <li>• Willing to learn languages and routines</li>
-        <li>• Suitable for childcare and general housework</li>
+        <li>• {data.nationalityPoints[0].point}</li>
+        <li>• {data.nationalityPoints[1].point}</li>
+        <li>• {data.nationalityPoints[2].point}</li>
       </ul>
     </article>
 
     <!-- Indonesian -->
     <article use:reveal={{ delay: 120 }} class="opacity-0 translate-y-6 p-7 rounded-2xl border  border-pink-300 bg-white shadow-sm hover:shadow-xl transition hover:-translate-y-1">
       <div class="flex items-center gap-3">
-        <span class="text-2xl">🇮🇩</span>
-        <h3 class="text-xl font-semibold text-pink-500">Indonesian Maids</h3>
+        <span class="text-2xl">{data.nationalities[1].flag}</span>
+        <h3 class="text-xl font-semibold text-pink-500">{data.nationalities[1].title}</h3>
       </div>
       <p class="mt-3 text-gray-600">
-        Experienced, caring, and often able to communicate in Malay. Trusted for childcare and elderly support.
+        {data.nationalities[1].description}
       </p>
       <ul class="mt-4 text-sm text-gray-700 space-y-2">
-        <li>• Warm personality and reliability</li>
-        <li>• Familiar with Southeast Asian cuisine</li>
-        <li>• Strong experience in caregiving</li>
+        <li>• {data.nationalityPoints[3].point}</li>
+        <li>• {data.nationalityPoints[4].point}</li>
+        <li>• {data.nationalityPoints[5].point}</li>
       </ul>
     </article>
   </div>
@@ -269,7 +269,7 @@ import { onMount } from "svelte";
         <div class="h-full rounded-2xl bg-white border p-5">
           <p class="text-sm text-gray-500">{data.steps[0].stepNumber}</p>
           <p class="font-semibold text-gray-800 mt-1">{data.steps[0].title}</p>
-          <p class="text-sm text-gray-600 mt-2">{data.steps[0].description} <span class="font-medium">{data.steps[4].description}</span></p>
+          <p class="text-sm text-gray-600 mt-2">{data.steps[0].description}</p>
         </div>
       </li>
       <li use:reveal={{ delay: 80 }} class="opacity-0 translate-y-6">

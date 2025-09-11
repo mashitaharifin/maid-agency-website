@@ -8,21 +8,17 @@
 </svelte:head>
 
 <section class="relative bg-cover bg-center bg-no-repeat py-32"
-  style="background-image: url({data.hero[0]?.bgImage});">
+  style="background-image: url({data.hero?.bgImage});">
   <!-- Dark overlay -->
   <div class="absolute inset-0 bg-black/50"></div>
 
   <!-- Header Content -->
   <div class="relative max-w-4xl mx-auto text-center px-4">
     <h1 class="text-4xl md:text-5xl font-bold text-white drop-shadow-lg animate-fadeIn">
-      {data.hero[0]?.mainHeading}
+      {data.hero?.mainHeading}
     </h1>
     <p class="mt-4 mb-12 text-gray-100 animate-fadeIn delay-200">
-      {data.hero[0]?.subheading} 
-      <span class="text-yellow-300 font-semibold">{data.hero[1]?.subheading}</span>, 
-      <span class="text-yellow-300 font-semibold">{data.hero[2]?.subheading}</span>, and 
-      <span class="text-yellow-300 font-semibold">{data.hero[3]?.subheading}</span> {data.hero[4]?.subheading}
-    </p>
+      {data.hero?.subheading} </p>
   </div>
 </section>
 
