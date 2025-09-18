@@ -26,10 +26,10 @@
   </div>
   <!-- Content -->
   <div class="relative text-center px-6 max-w-3xl">
-    <h1 class="text-4xl md:text-4xl font-bold mb-4 drop-shadow-lg">
+    <h1 class="text-3xl md:text-4xl font-bold mb-4 drop-shadow-lg">
       {data.hero?.mainHeading}
     </h1>
-    <p class="mt-4 mb-12 text-gray-100 text-xl animate-fadeIn delay-200">
+    <p class="mt-60 md:mt-6 mb-0 text-gray-100 text-base md:text-xl animate-fadeIn delay-200">
       {data.hero?.subheading}
     </p>
   </div>

@@ -42,7 +42,7 @@
         <!-- Home -->
         <li>
           <a href="/" 
-            class="block py-2 px-3 text-[#B8860B] border-b border-gray-100 hover:bg-gray-50 
+            class="block py-2 px-3 text-[#B8860B] border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 
             md:hover:bg-transparent md:border-0 md:hover:text-[#f5b9dd] md:p-0">
             Home
           </a>
@@ -51,8 +51,8 @@
         <!-- Our Services (Dropdown) -->
         <li class="relative">
           <button id="services-dropdown-button" data-dropdown-toggle="services-dropdown" 
-            class="flex items-center justify-between w-full py-2 px-3 font-medium text-gray-900 
-            border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 
+            class="flex items-center justify-between w-full py-2 px-3 dark:text-white font-medium text-gray-900 
+            border-b border-gray-100 dark:border-gray-700 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 
             md:hover:text-[#f5b9dd] md:p-0">
             Our Services
             <svg class="w-2.5 h-2.5 ms-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -62,7 +62,7 @@
 
           <!-- Dropdown Menu -->
           <div id="services-dropdown" 
-            class="absolute z-10 hidden w-48 bg-white rounded-lg shadow-md border border-gray-100 md:mt-2">
+            class="absolute z-10 hidden w-48 bg-white rounded-lg shadow-md border border-gray-100 dark:border-gray-700 md:mt-2">
             <ul class="py-2 text-sm text-gray-700">
               <li>
                 <a href="/services/maid" class="block px-4 py-2 hover:bg-gray-100 hover:text-[#f5b9dd]">Maid</a>
@@ -80,7 +80,7 @@
         <!-- About Us -->
         <li>
           <a href="/about" 
-            class="block py-2 px-3 text-gray-900 border-b border-gray-100 hover:bg-gray-50 
+            class="block py-2 px-3 text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 
             md:hover:bg-transparent md:border-0 md:hover:text-[#f5b9dd] md:p-0">
             About Us
           </a>
@@ -89,7 +89,7 @@
         <!-- Find Your Helper -->
         <li>
           <a href="/findhelper" 
-            class="block py-2 px-3 text-gray-900 border-b border-gray-100 hover:bg-gray-50 
+            class="block py-2 px-3 text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 
             md:hover:bg-transparent md:border-0 md:hover:text-[#f5b9dd] md:p-0">
             Find Your Helper
           </a>
