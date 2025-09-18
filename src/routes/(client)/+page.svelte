@@ -17,23 +17,31 @@
 </svelte:head>
 
 <!-- HERO SECTION -->
-<section class="relative h-[50vh] flex items-center justify-center bg-gray-900 text-white">
+<section class="relative h-[50vh] flex flex-col justify-between bg-gray-900 text-white">
   <!-- Background image -->
   <div class="absolute inset-0">
     <img src={data.hero?.bgImage} alt="Maid Agency Header" class="w-full h-full object-cover" />
     <!-- Overlay -->
     <div class="absolute inset-0 bg-black/50"></div>
   </div>
+
   <!-- Content -->
-  <div class="relative text-center px-6 max-w-3xl">
-    <h1 class="text-3xl md:text-4xl font-bold mb-4 drop-shadow-lg">
-      {data.hero?.mainHeading}
-    </h1>
-    <p class="mt-60 md:mt-6 mb-0 text-gray-100 text-base md:text-xl animate-fadeIn delay-200">
+  <div class="relative flex-1 flex flex-col justify-between items-center text-center px-6 max-w-3xl mx-auto">
+    
+    <!-- Main Heading (centered) -->
+    <div class="flex-1 flex items-center justify-center">
+      <h1 class="text-3xl md:text-6xl font-bold drop-shadow-lg">
+        {data.hero?.mainHeading}
+      </h1>
+    </div>
+
+    <!-- Subheading (bottom) -->
+    <p class="mb-6 text-gray-100 text-base md:text-xl animate-fadeIn delay-200">
       {data.hero?.subheading}
     </p>
   </div>
 </section>
+
 
 <!-- ABOUT US SECTION -->
 <section class="py-20 bg-white">
