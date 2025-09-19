@@ -1,6 +1,7 @@
 <script lang="ts">
   export let data: { title?: string; user: { id: string; username: string } };
   import "../../../app.css";
+  import favicon from '$lib/assets/logo.png'
 
   import {
     LayoutDashboard,
@@ -22,6 +23,10 @@
   let sidebarOpen = true;
   let servicesOpen = true; 
 </script>
+
+<svelte:head>
+	<link rel="icon" href={favicon} />
+</svelte:head>
 
 <style>
   .container {

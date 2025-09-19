@@ -86,15 +86,36 @@ export const actions = {
     const id = Number(form.get("id"));
     const sectionTitle = form.get("sectionTitle") as string;
     const caption = form.get("caption") as string;
-    const urlImage = form.get("urlImage") as string;
 
-    await db
-      .update(schema.homepageRecognitions)
-      .set({ sectionTitle, caption, urlImage })
-      .where(eq(schema.homepageRecognitions.id, id));
+    let urlImage: string | null = null;
+    const fileField = form.get("urlImage");
 
-    await logActivity("Home - Recognitions");
-    return { success: "Recognitions section updated successfully!" };
+    try {
+      if (fileField instanceof File && fileField.size > 0) {
+        const uploadDir = "static/images";
+        const fileName = `${Date.now()}-${fileField.name}`;
+        const filePath = path.join(uploadDir, fileName);
+
+        fs.mkdirSync(uploadDir, { recursive: true });
+        const buffer = Buffer.from(await fileField.arrayBuffer());
+        fs.writeFileSync(filePath, buffer);
+
+        urlImage = `/images/${fileName}`;
+      } else {
+        urlImage = (form.get("urlImage") as string) || null;
+      }
+
+      await db
+        .update(schema.homepageRecognitions)
+        .set({ sectionTitle, caption, urlImage })
+        .where(eq(schema.homepageRecognitions.id, id));
+
+      await logActivity("Home - Recognitions");
+      return { success: "Recognitions section updated successfully!" };
+    } catch (e) {
+      console.error("Error updating recognitions:", e);
+      return fail(500, { error: "Failed to update recognitions" });
+    }
   },
 
   updateService: async ({ request }) => {

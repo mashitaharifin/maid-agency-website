@@ -70,6 +70,28 @@
       previewSrc = null;
     }
   }
+
+  let recogFile: File | null = null;
+  let recogFileName: string = "No file chosen";
+  let recogPreview: string | null = data.recognitions?.urlImage ?? null;
+
+  function handleRecogFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    recogFile = file;
+
+    if (file) {
+      recogFileName = file.name;
+      const reader = new FileReader();
+      reader.onload = () => {
+        recogPreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      recogFileName = "No file chosen";
+      recogPreview = null;
+    }
+  }
 </script>
 
 <svelte:head>
@@ -224,29 +246,71 @@
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-xl font-bold text-pink-600">Recognitions</h2>
       {#if !editingRecognitions}
-        <button class="text-sm text-gray-600 hover:text-pink-600" on:click={() => (editingRecognitions = true)}>✏️ Edit</button>
+        <button
+          class="text-sm text-gray-600 hover:text-pink-600"
+          on:click={() => (editingRecognitions = true)}
+        >
+          ✏️ Edit
+        </button>
       {/if}
     </div>
 
     {#if editingRecognitions}
-      <form method="post" action="?/updateRecognitions" class="space-y-4">
+      <form method="post" action="?/updateRecognitions" enctype="multipart/form-data" class="space-y-4">
         <input type="hidden" name="id" value={data.recognitions?.id ?? ""} />
 
         <!-- svelte-ignore a11y_label_has_associated_control -->
         <label class="block">Section Title</label>
-        <input type="text" name="sectionTitle" value={data.recognitions?.sectionTitle ?? ""} class="w-full p-2 border rounded" />
+        <input
+          type="text"
+          name="sectionTitle"
+          value={data.recognitions?.sectionTitle ?? ""}
+          class="w-full p-2 border rounded"
+        />
 
         <!-- svelte-ignore a11y_label_has_associated_control -->
         <label class="block">Caption</label>
-        <input type="text" name="caption" value={data.recognitions?.caption ?? ""} class="w-full p-2 border rounded" />
+        <input
+          type="text"
+          name="caption"
+          value={data.recognitions?.caption ?? ""}
+          class="w-full p-2 border rounded"
+        />
 
         <!-- svelte-ignore a11y_label_has_associated_control -->
-        <label class="block">Image URL</label>
-        <input type="text" name="urlImage" value={data.recognitions?.urlImage ?? ""} class="w-full p-2 border rounded" />
+        <label class="block">Upload Image</label>
+        <label
+          for="urlImage"
+          class="inline-block cursor-pointer px-4 py-2 bg-pink-400 text-white rounded-xl hover:bg-pink-600 transition"
+        >
+          Choose File
+        </label>
+        <input
+          id="urlImage"
+          type="file"
+          name="urlImage"
+          accept="image/*"
+          class="hidden"
+          on:change={handleRecogFileChange}
+        />
+        <span class="ml-2 text-gray-600 italic">{recogFileName}</span>
+
+        {#if recogPreview}
+          <img src={recogPreview} alt="Preview" class="w-40 mt-2 rounded shadow" />
+        {/if}
 
         <div class="flex gap-3 mt-4">
-          <button type="submit" class="px-5 py-2.5 bg-pink-600 text-white rounded-xl">Save</button>
-          <button type="button" class="px-5 py-2.5 bg-gray-200 text-gray-700 rounded-xl" on:click={() => (editingRecognitions = false)}>
+          <button
+            type="submit"
+            class="px-5 py-2.5 bg-pink-600 text-white rounded-xl"
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            class="px-5 py-2.5 bg-gray-200 text-gray-700 rounded-xl"
+            on:click={() => (editingRecognitions = false)}
+          >
             Cancel
           </button>
         </div>
@@ -255,7 +319,11 @@
       <p><b>{data.recognitions?.sectionTitle ?? "—"}</b></p>
       <p>{data.recognitions?.caption ?? "—"}</p>
       {#if data.recognitions?.urlImage}
-        <img src={data.recognitions.urlImage} alt="Certificate" class="w-40 mt-2 rounded shadow" />
+        <img
+          src={data.recognitions.urlImage}
+          alt="Certificate"
+          class="w-40 mt-2 rounded shadow"
+        />
       {/if}
     {/if}
   </section>
