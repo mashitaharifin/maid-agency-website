@@ -16,7 +16,7 @@
   <div class="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto p-4">
     <!-- LEFT SIDE: Logo + Agency Name -->
     <div class="flex items-center space-x-3">
-      <img src={navBar.logoUrl} class="h-8" alt="logo" />
+      <img src="images/logo.png" class="h-8" alt="logo" />
       <a href="/" class="text-xl font-bold text-gray-800 dark:text-white">{navBar.agencyName}</a>
     </div>
 
