@@ -3,6 +3,8 @@ import { db, schema } from "$lib/server/db";
 import { fail } from "@sveltejs/kit";
 import { eq, asc } from "drizzle-orm";
 import { logActivity } from "$lib/server/activityLogger";
+import fs from "fs";
+import path from "path";
 
 export async function load() {
   const hero = await db.query.insuranceHero.findFirst();
@@ -14,15 +16,38 @@ export async function load() {
 
 export const actions = {
   updateHero: async ({ request }) => {
-    const formData = await request.formData();
-    const id = Number(formData.get("id"));
+    const form = await request.formData();
+    const id = Number(form.get("id"));
+    const mainHeading = form.get("mainHeading") as string;
+    const subheading = form.get("subheading") as string;
+
+    if (!id) return fail(400, { error: "Missing hero ID" });
+
+    let bgImageUrl: string | null = null;
+    const bgImageField = form.get("bgImage");
 
     try {
-      await db.update(schema.insuranceHero)
+      if (bgImageField instanceof File && bgImageField.size > 0) {
+        const uploadDir = "static/images";
+        const fileName = `${Date.now()}-${bgImageField.name}`;
+        const filePath = path.join(uploadDir, fileName);
+
+        fs.mkdirSync(uploadDir, { recursive: true });
+
+        const buffer = Buffer.from(await bgImageField.arrayBuffer());
+        fs.writeFileSync(filePath, buffer);
+
+        bgImageUrl = `/images/${fileName}`;
+      } else {
+        bgImageUrl = (form.get("bgImage") as string) || null;
+      }
+
+      await db
+        .update(schema.insuranceHero)
         .set({
-          bgImage: formData.get("bgImage") as string,
-          mainHeading: formData.get("mainHeading") as string,
-          subheading: formData.get("subheading") as string,
+          bgImage: bgImageUrl,
+          mainHeading,
+          subheading,
         })
         .where(eq(schema.insuranceHero.id, id));
 

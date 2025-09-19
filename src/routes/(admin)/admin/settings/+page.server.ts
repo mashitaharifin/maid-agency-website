@@ -3,6 +3,8 @@ import { db, schema } from "$lib/server/db";
 import { fail } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { logActivity } from "$lib/server/activityLogger";
+import fs from "fs";
+import path from "path";
 
 export async function load() {
   const settings = await db.query.globalContent.findFirst();
@@ -11,14 +13,33 @@ export async function load() {
 
 export const actions = {
   updateNavbar: async ({ request }) => {
-    const formData = await request.formData();
-    const id = Number(formData.get("id"));
+    const form = await request.formData();
+    const id = Number(form.get("id") ?? 1);
+    const agencyName = form.get("agencyName") as string;
+
+    let logoUrl: string | null = null;
+    const logoField = form.get("logoUrl");
 
     try {
-      await db.update(schema.globalContent)
+      if (logoField instanceof File && logoField.size > 0) {
+        const uploadDir = "static/images";
+        const fileName = `${Date.now()}-${logoField.name}`;
+        const filePath = path.join(uploadDir, fileName);
+
+        fs.mkdirSync(uploadDir, { recursive: true });
+        const buffer = Buffer.from(await logoField.arrayBuffer());
+        fs.writeFileSync(filePath, buffer);
+
+        logoUrl = `/images/${fileName}`;
+      } else {
+        logoUrl = (form.get("logoUrl") as string) || null;
+      }
+
+      await db
+        .update(schema.globalContent)
         .set({
-          logoUrl: formData.get("logoUrl") as string,
-          agencyName: formData.get("agencyName") as string,
+          logoUrl,
+          agencyName,
         })
         .where(eq(schema.globalContent.id, id));
 

@@ -9,6 +9,8 @@ import {
 import { fail, type Actions, type ServerLoad } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { logActivity } from "$lib/server/activityLogger";
+import fs from "fs";
+import path from "path";
 
 export const load: ServerLoad = async () => {
   const hero = await db.query.helperHero.findFirst();
@@ -22,14 +24,44 @@ export const load: ServerLoad = async () => {
 
 export const actions: Actions = {
   updateHero: async ({ request }) => {
-    const data = await request.formData();
-    const bgImage = data.get("bgImage") as string;
-    const mainHeading = data.get("mainHeading") as string;
-    const subheading = data.get("subheading") as string;
+    const form = await request.formData();
+    const id = Number(form.get("id") ?? 1);
+    const mainHeading = form.get("mainHeading") as string;
+    const subheading = form.get("subheading") as string;
 
-    await db.update(helperHero).set({ bgImage, mainHeading, subheading }).where(eq(helperHero.id, 1));
-    await logActivity("Find Helper - Hero");
-    return { success: true, message: "Hero updated successfully!" };
+    let bgImageUrl: string | null = null;
+    const bgImageField = form.get("bgImage");
+
+    try {
+      if (bgImageField instanceof File && bgImageField.size > 0) {
+        const uploadDir = "static/images";
+        const fileName = `${Date.now()}-${bgImageField.name}`;
+        const filePath = path.join(uploadDir, fileName);
+
+        fs.mkdirSync(uploadDir, { recursive: true });
+        const buffer = Buffer.from(await bgImageField.arrayBuffer());
+        fs.writeFileSync(filePath, buffer);
+
+        bgImageUrl = `/images/${fileName}`;
+      } else {
+        bgImageUrl = (form.get("bgImage") as string) || null;
+      }
+
+      await db
+        .update(helperHero)
+        .set({
+          bgImage: bgImageUrl,
+          mainHeading,
+          subheading,
+        })
+        .where(eq(helperHero.id, id));
+
+      await logActivity("Find Helper - Hero");
+      return { success: true, message: "Hero updated successfully!" };
+    } catch (e) {
+      console.error("Error updating hero:", e);
+      return fail(500, { error: "Failed to update hero" });
+    }
   },
 
   updateSteps: async ({ request }) => {

@@ -3,6 +3,8 @@ import { fail, redirect } from "@sveltejs/kit";
 import { db, schema } from "$lib/server/db";
 import { asc, eq } from "drizzle-orm";
 import { logActivity } from "$lib/server/activityLogger";
+import fs from "fs";
+import path from "path";
 
 export const load = async () => {
   const hero = await db.query.homepageHero.findFirst();
@@ -26,11 +28,39 @@ export const actions = {
     const id = Number(form.get("id"));
     const mainHeading = form.get("mainHeading") as string;
     const subheading = form.get("subheading") as string;
-    const bgImage = form.get("bgImage") as string;
+    
+    if (!id) return fail(400, { error: "Missing hero ID" });
+
+    let bgImageUrl: string | null = null;
+    const bgImageField = form.get("bgImage");
+
+    // Handle file upload
+    if (bgImageField instanceof File && bgImageField.size > 0) {
+      const uploadDir = "static/images";
+      const fileName = `${Date.now()}-${bgImageField.name}`;
+      const filePath = path.join(uploadDir, fileName);
+
+      // Ensure folder exists
+      fs.mkdirSync(uploadDir, { recursive: true });
+
+      // Save file
+      const buffer = Buffer.from(await bgImageField.arrayBuffer());
+      fs.writeFileSync(filePath, buffer);
+
+      // Public URL for DB
+      bgImageUrl = `/images/${fileName}`;
+    } else {
+      // Keep existing image if no new upload
+      bgImageUrl = (form.get("bgImage") as string) || null;
+    }
 
     await db
       .update(schema.homepageHero)
-      .set({ mainHeading, subheading, bgImage })
+      .set({
+        bgImage: bgImageUrl,
+        mainHeading,
+        subheading,
+      })
       .where(eq(schema.homepageHero.id, id));
 
       await logActivity("Home - Hero");

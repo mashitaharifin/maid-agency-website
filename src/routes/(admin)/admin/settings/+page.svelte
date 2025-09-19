@@ -30,6 +30,23 @@
     if (section === "navbar") editingNavbar = false;
     if (section === "footer") editingFooter = false;
   }
+
+  let files: FileList | null = null;
+  let fileName: string = "No file chosen";
+  let previewSrc: string | null = null;
+
+  $: {
+    const file = files?.[0] ?? null;
+    if (file) {
+      fileName = file.name;
+      const reader = new FileReader();
+      reader.onload = () => (previewSrc = reader.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      fileName = "No file chosen";
+      previewSrc = null;
+    }
+  }
 </script>
 
 <svelte:head>
@@ -79,37 +96,61 @@
         <button
           class="text-sm text-gray-600 hover:text-pink-600"
           on:click={() => (editingNavbar = true)}
-          >✏️ Edit</button
         >
+          ✏️ Edit
+        </button>
       {/if}
     </div>
 
     {#if editingNavbar}
-      <form method="post">
+      <form method="post" action="?/updateNavbar" enctype="multipart/form-data" class="space-y-4">
         <input type="hidden" name="id" value={data.settings.id} />
 
+        <!-- Logo -->
         <!-- svelte-ignore a11y_label_has_associated_control -->
-        <label class="block mb-2">Logo URL</label>
+        <label class="block">Logo</label>
+        {#if data.settings.logoUrl}
+          <img
+            src={data.settings.logoUrl}
+            alt="Current Logo"
+            class="h-16 object-contain rounded mb-2"
+          />
+        {/if}
+
         <input
-          type="text"
+          id="logoUrl"
+          type="file"
           name="logoUrl"
-          bind:value={draft.logoUrl}
-          class="w-full p-2 border rounded"
+          accept="image/*"
+          class="hidden"
+          bind:files={files}
         />
 
+        <label
+          for="logoUrl"
+          class="inline-block cursor-pointer px-4 py-2 bg-pink-400 text-white rounded-2xl hover:bg-pink-600 transition"
+        >
+          Choose File
+        </label>
+        <span class="ml-2 text-gray-600 italic">{fileName}</span>
+
+        {#if previewSrc}
+          <img src={previewSrc} alt="Logo Preview" class="h-16 object-contain rounded mt-2" />
+        {/if}
+
+        <!-- Agency Name -->
         <!-- svelte-ignore a11y_label_has_associated_control -->
         <label class="block mt-4 mb-2">Agency Name</label>
         <input
           type="text"
           name="agencyName"
-          bind:value={draft.agencyName}
+          value={data.settings.agencyName}
           class="w-full p-2 border rounded"
         />
 
         <div class="flex gap-3 mt-6">
           <button
             type="submit"
-            formaction="?/updateNavbar"
             class="px-5 py-2.5 bg-pink-600 text-white rounded-xl"
           >
             Save
@@ -124,7 +165,16 @@
         </div>
       </form>
     {:else}
-      <p><b>Logo URL:</b> {data.settings.logoUrl}</p>
+      <p>
+        <b>Logo:</b>
+        {#if data.settings.logoUrl}
+          <img
+            src={data.settings.logoUrl}
+            alt="Logo Preview"
+            class="h-10 inline ml-2 object-contain"
+          />
+        {/if}
+      </p>
       <p><b>Agency Name:</b> {data.settings.agencyName}</p>
     {/if}
   </section>

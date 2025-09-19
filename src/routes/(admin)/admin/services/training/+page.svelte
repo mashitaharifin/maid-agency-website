@@ -31,6 +31,26 @@
     if (section === "trainings") editingTrainings = false;
     if (section === "plans") editingPlans = false;
   }
+
+  let files: FileList | null = null;
+  let fileName: string = "No file chosen";
+  let previewSrc: string | null = null;
+
+  $: {
+    const file: File | null = files?.[0] ?? null;
+    if (file) {
+      fileName = file.name;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        previewSrc = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      fileName = "No file chosen";
+      previewSrc = null;
+    }
+  }
 </script>
 
 <svelte:head>
@@ -77,33 +97,84 @@
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-xl font-bold text-pink-600">Hero Section</h2>
       {#if !editingHero}
-        <button class="text-sm text-gray-600 hover:text-pink-600" on:click={() => (editingHero = true)}>✏️ Edit</button>
+        <button 
+          class="text-sm text-gray-600 hover:text-pink-600" 
+          on:click={() => (editingHero = true)}
+        >
+          ✏️ Edit
+        </button>
       {/if}
     </div>
 
     {#if editingHero}
-      <form method="post">
-        <input type="hidden" name="id" value={draft.hero?.id} />
+      <form method="post" action="?/updateHero" enctype="multipart/form-data" class="space-y-4">
+        <input type="hidden" name="id" value={data.hero?.id ?? ""} />
 
+        <!-- Background Image -->
         <!-- svelte-ignore a11y_label_has_associated_control -->
-        <label class="block mb-2">Background Image URL</label>
-        <input type="text" name="bgImage" bind:value={draft.hero!.bgImage} class="w-full p-2 border rounded" />
+        <label class="block">Background Image</label>
+        {#if data.hero?.bgImage}
+          <img src={data.hero.bgImage} alt="Current hero background" class="h-32 object-cover rounded mb-2" />
+        {/if}
 
-        <!-- svelte-ignore a11y_label_has_associated_control -->
-        <label class="block mt-4 mb-2">Main Heading</label>
-        <input type="text" name="mainHeading" bind:value={draft.hero!.mainHeading} class="w-full p-2 border rounded" />
+        <input 
+          id="bgImage" 
+          type="file" 
+          name="bgImage" 
+          accept="image/*" 
+          class="hidden" 
+          bind:files={files} 
+        />
 
+        <label
+          for="bgImage"
+          class="inline-block cursor-pointer px-4 py-2 bg-pink-400 text-white rounded-2xl hover:bg-pink-600 transition"
+        >
+          Choose File
+        </label>
+        <span class="ml-2 text-gray-600 italic">{fileName}</span>
+
+        {#if previewSrc}
+          <img src={previewSrc} alt="Preview" class="h-32 object-cover rounded mt-2" />
+        {/if}
+
+        <!-- Main Heading -->
         <!-- svelte-ignore a11y_label_has_associated_control -->
-        <label class="block mt-4 mb-2">Subheading</label>
-        <textarea rows="2" name="subheading" bind:value={draft.hero!.subheading} class="w-full p-2 border rounded"></textarea>
+        <label class="block">Main Heading</label>
+        <input 
+          type="text" 
+          name="mainHeading" 
+          value={data.hero?.mainHeading ?? ""} 
+          class="w-full p-2 border rounded" 
+        />
+
+        <!-- Subheading -->
+        <!-- svelte-ignore a11y_label_has_associated_control -->
+        <label class="block">Subheading</label>
+        <textarea 
+          name="subheading" 
+          rows="2" 
+          class="w-full p-2 border rounded"
+        >{data.hero?.subheading ?? ""}</textarea>
 
         <div class="flex gap-3 mt-6">
-          <button type="submit" formaction="?/updateHero" class="px-5 py-2.5 bg-pink-600 text-white rounded-xl">Save</button>
-          <button type="button" on:click={() => cancel("hero")} class="px-5 py-2.5 bg-gray-200 text-gray-700 rounded-xl">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 bg-pink-600 text-white rounded-xl">Save</button>
+          <button 
+            type="button" 
+            class="px-5 py-2.5 bg-gray-200 text-gray-700 rounded-xl" 
+            on:click={() => (editingHero = false)}
+          >
+            Cancel
+          </button>
         </div>
       </form>
     {:else}
-      <p><b>Background:</b> {data.hero?.bgImage}</p>
+      <p><b>Background:</b>
+        {#if data.hero?.bgImage}
+          <img src={data.hero.bgImage} alt="Hero preview" class="h-20 object-cover inline rounded ml-2" />
+        {/if}
+      </p>
+      <br>
       <p><b>Main Heading:</b> {data.hero?.mainHeading}</p>
       <p><b>Subheading:</b> {data.hero?.subheading}</p>
     {/if}

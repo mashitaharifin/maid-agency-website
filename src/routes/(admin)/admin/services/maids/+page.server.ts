@@ -11,6 +11,9 @@ import {
 } from "$lib/server/db/schema";
 import { asc, eq } from "drizzle-orm";
 import { logActivity } from "$lib/server/activityLogger";
+import fs from "fs";
+import path from "path";
+
 
 export const load: PageServerLoad = async () => {
   try {
@@ -36,14 +39,43 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
   updateHero: async ({ request }) => {
-    const formData = await request.formData();
-    const id = Number(formData.get("id"));
+    const form = await request.formData();
+    const id = Number(form.get("id"));
+    const mainHeading = form.get("mainHeading") as string;
+    const subheading = form.get("subheading") as string;
+
+    if (!id) return fail(400, { error: "Missing hero ID" });
+
+    let bgImageUrl: string | null = null;
+    const bgImageField = form.get("bgImage");
+
     try {
-      await db.update(maidHero)
+      // Handle file upload
+      if (bgImageField instanceof File && bgImageField.size > 0) {
+        const uploadDir = "static/images";
+        const fileName = `${Date.now()}-${bgImageField.name}`;
+        const filePath = path.join(uploadDir, fileName);
+
+        // Ensure folder exists
+        fs.mkdirSync(uploadDir, { recursive: true });
+
+        // Save file
+        const buffer = Buffer.from(await bgImageField.arrayBuffer());
+        fs.writeFileSync(filePath, buffer);
+
+        // Public URL for DB
+        bgImageUrl = `/images/${fileName}`;
+      } else {
+        // Keep existing image if no new upload
+        bgImageUrl = (form.get("bgImage") as string) || null;
+      }
+
+      await db
+        .update(maidHero)
         .set({
-          bgImage: formData.get("bgImage") as string,
-          mainHeading: formData.get("mainHeading") as string,
-          subheading: formData.get("subheading") as string
+          bgImage: bgImageUrl,
+          mainHeading,
+          subheading,
         })
         .where(eq(maidHero.id, id));
 
@@ -108,16 +140,41 @@ export const actions: Actions = {
   updateGalleryImages: async ({ request }) => {
     const formData = await request.formData();
     const count = Number(formData.get("count"));
+
     try {
       for (let i = 0; i < count; i++) {
         const id = Number(formData.get(`id_${i}`));
+        const alt = formData.get(`alt_${i}`) as string;
+
+        let imageUrl: string | null = null;
+        const imageField = formData.get(`galleryImage_${i}`);
+
+        // Handle file upload
+        if (imageField instanceof File && imageField.size > 0) {
+          const uploadDir = "static/images";
+          const fileName = `${Date.now()}-${imageField.name}`;
+          const filePath = path.join(uploadDir, fileName);
+
+          fs.mkdirSync(uploadDir, { recursive: true });
+
+          const buffer = Buffer.from(await imageField.arrayBuffer());
+          fs.writeFileSync(filePath, buffer);
+
+          imageUrl = `/images/${fileName}`;
+        } else {
+          // Keep existing image if no new upload
+          const existingImageUrl = formData.get(`imageUrl_${i}`) as string | null;
+          imageUrl = existingImageUrl || ""; // Use an empty string if it's null
+        }
+
         await db.update(maidGalleryImages)
           .set({
-            imageUrl: formData.get(`imageUrl_${i}`) as string,
-            alt: formData.get(`alt_${i}`) as string
+            imageUrl,
+            alt,
           })
           .where(eq(maidGalleryImages.id, id));
       }
+
       await logActivity("Maids - Gallery Images");
       return { success: true, message: "Gallery images updated successfully!" };
     } catch (e) {

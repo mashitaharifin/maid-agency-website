@@ -4,6 +4,8 @@ import { db } from "$lib/server/db";
 import { aboutHero, aboutMissionVision, aboutCoreValues, aboutFindUs} from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 import { logActivity } from "$lib/server/activityLogger";
+import fs from 'fs';
+import path from 'path';
 
 export const load: PageServerLoad = async () => {
   const hero = await db.query.aboutHero.findFirst();
@@ -23,15 +25,43 @@ export const actions: Actions = {
   updateHero: async ({ request }) => {
     const form = await request.formData();
     const id = Number(form.get("id"));
-    const bgImage = form.get("bgImage") as string;
     const mainHeading = form.get("mainHeading") as string;
     const subheading = form.get("subheading") as string;
 
     if (!id) return fail(400, { error: "Missing hero ID" });
 
+    let bgImageUrl: string | null = null;
+    const bgImageField = form.get("bgImage");
+
+    // Handle file upload
+    if (bgImageField instanceof File && bgImageField.size > 0) {
+      const uploadDir = 'static/images';
+      const fileName = `${Date.now()}-${bgImageField.name}`;
+      const filePath = path.join(uploadDir, fileName);
+
+      // Ensure folder exists
+      fs.mkdirSync(uploadDir, { recursive: true });
+
+      // Save file
+      const buffer = Buffer.from(await bgImageField.arrayBuffer());
+      fs.writeFileSync(filePath, buffer);
+
+      // Public URL for DB
+      bgImageUrl = `/images/${fileName}`;
+    } else {
+      // If no new upload, keep existing value from DB
+      // (you may already have hero data fetched in load, but here we re-use form data fallback)
+      bgImageUrl = (form.get("bgImage") as string) || null;
+    }
+
+    // Save to DB
     await db
       .update(aboutHero)
-      .set({ bgImage, mainHeading, subheading })
+      .set({
+        bgImage: bgImageUrl,
+        mainHeading,
+        subheading
+      })
       .where(eq(aboutHero.id, id));
 
     await logActivity("About Us - Hero");
