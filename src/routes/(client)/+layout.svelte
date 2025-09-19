@@ -109,7 +109,7 @@
   href="{footer?.whatsappLink}"
   target="_blank"
   rel="noopener"
-  class="fixed bottom-4 right-4 inline-flex items-center gap-2 rounded-full px-5 py-3 text-white bg-pink-300 hover:bg-gradient-to-r from-[#f5b9dd] to-[#ebd07a] shadow-lg active:scale-[0.98] transition"
+  class="fixed bottom-4 right-4 inline-flex items-center gap-2 rounded-full px-5 py-3 text-white bg-[#00C9A7] hover:bg-gradient-to-r from-[#f5b9dd] to-[#ebd07a] shadow-lg active:scale-[0.98] transition"
   aria-label="Chat on WhatsApp"
 >
   <!-- icon -->
