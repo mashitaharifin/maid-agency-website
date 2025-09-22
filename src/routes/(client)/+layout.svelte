@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../../app.css';
-	import favicon from '$lib/assets/logo.jpg'
+	import favicon from '$lib/assets/logo.png'
 	import 'flowbite';
 	let { data, children } = $props();
   const footer = data.globalContent;
