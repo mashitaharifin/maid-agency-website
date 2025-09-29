@@ -18,7 +18,7 @@
     <div class="flex items-center space-x-3">
       <img src="images/logo.jpg" class="h-8" alt="logo" />
       <a href="/" class="text-xl font-bold text-gray-800 dark:text-white">
-        {navBar.agencyName || 'Maid Search Singapore Pte Ltd'}
+        {navBar?.agencyName || 'Maid Search Singapore Pte Ltd'}
       </a>
     </div>
 
