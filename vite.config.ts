@@ -5,6 +5,12 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	base: "/maid-agency-website/",
 	plugins: [
-		tailwindcss(), sveltekit()
-	],
-});
+		tailwindcss(), 
+	        sveltekit()
+                ],  preview: {
+                                allowedHosts: ['staging.maidsearchsg.com']
+                             }          
+});                       
+                
+       
+
